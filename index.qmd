@@ -1,6 +1,7 @@
 ---
 title: "Data Manipulation Challenge"
 subtitle: "A Mental Model for Method Chaining in Pandas"
+jupyter: python3
 format:
   html: default
 execute:
@@ -156,18 +157,24 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime, timedelta
+from io import StringIO
+import requests
 
-# Load the shipment data
+# Load the shipment data (using requests to avoid SSL certificate issues on macOS)
+shipments_url = "https://raw.githubusercontent.com/flyaflya/persuasive/main/shipments.csv"
 shipments_df = pd.read_csv(
-    "https://raw.githubusercontent.com/flyaflya/persuasive/main/shipments.csv", 
+    StringIO(requests.get(shipments_url).text),
     parse_dates=['plannedShipDate', 'actualShipDate']
 )
 
 # Load product line data
-product_line_df = pd.read_csv(
-    "https://raw.githubusercontent.com/flyaflya/persuasive/main/productLine.csv"
-)
+product_line_url = "https://raw.githubusercontent.com/flyaflya/persuasive/main/productLine.csv"
+product_line_df = pd.read_csv(StringIO(requests.get(product_line_url).text))
 
+```
+
+
+```{python}
 # Reduce dataset size for faster processing (4,000 rows instead of 96,805 rows)
 shipments_df = shipments_df.head(4000)
 
